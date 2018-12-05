@@ -92,3 +92,37 @@
          ((list? (car s)) (cons (is-poly (car s) x) (grovel-poly-eval (cdr s) x)))
          (else
           (cons (car s) (grovel-poly-eval (cdr s) x))))))))
+
+(define extra-mult 
+  (lambda (replacement index)
+  (cond
+    ((equal? index 0 ) '(1))
+    ((equal? index 1 ) replacement)
+    ((equal? index 2 ) (poly-mul replacement replacement))
+    (else
+      (poly-mul replacement (extra-mult replacement (- index 1))))
+    )))
+
+(define add-extra
+  (lambda (poly index replacement)
+    (cond
+      ((null? poly) '())
+      (else 
+        (poly-add (scalar (extra-mult replacement index) (car poly)) (add-extra (cdr poly) (+ index 1 ) replacement) ))
+      )
+  ))
+
+(define poly-shift 
+  (lambda (p s)
+    (cond 
+      ((null? p) '())
+      ((= (length p) 1) car p)
+      (else 
+        (let ([replacement (cons s '(1))])
+          (add-extra p 0 replacement)
+        )
+        )
+      
+      
+      )
+  ))
