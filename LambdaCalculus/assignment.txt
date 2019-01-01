@@ -1,0 +1,24 @@
+Part 1
+
+Question 1
+kons = λ a d z . z false a d
+In Lambda Calc this means:
+λ a . (λ d .(λ z . ((z false) a) d))
+Kons creates a list in the order of {z false, a}, for example we can set z as 2 and a as 3 and it returns the following:
+(λa.(λd.(2 3)))
+
+Question 2
+kar = λ p . p (λ n a d . a)
+Kar here takes in a list {a,d} and returns the first thing in the list, a.
+
+Question 3
+kdr = λ p . p (λ n a d . d)
+Kdr here takes in a list {a,d} and returns everything but the first thing in the list, d.
+
+Question 4
+null = λ z . z true false false
+Null takes in a list, z , and checks to see if it's empty.
+
+Question 5
+
+
