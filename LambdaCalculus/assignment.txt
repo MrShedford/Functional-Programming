@@ -1,24 +1,210 @@
+Seán Edward Comerford
+15485892
+Lambda Calculus Assignment
+
 Part 1
+A:
+    Question 1
+    kons= lambda a d z . z false a d
+        = lambda a d . z false a d 
+        //z being false doesn't make a difference, still constructs a pair/list because it's only concerned with a and d
 
-Question 1
-kons = λ a d z . z false a d
-In Lambda Calc this means:
-λ a . (λ d .(λ z . ((z false) a) d))
-Kons creates a list in the order of {z false, a}, for example we can set z as 2 and a as 3 and it returns the following:
-(λa.(λd.(2 3)))
+    Question 2
+    kar = lambda p . p (lambda n a d . a)
+        = lambda p . p (true)
+        = lambda p . p true
 
-Question 2
-kar = λ p . p (λ n a d . a)
-Kar here takes in a list {a,d} and returns the first thing in the list, a.
+    Question 3
+    kdr = lambda p . p (lambda n a d . d)
+        = lambda p . p (false)
+        = lambda p . p false
 
-Question 3
-kdr = λ p . p (λ n a d . d)
-Kdr here takes in a list {a,d} and returns everything but the first thing in the list, d.
+    Question 4
+    null = lambda z . z true false false
+	     = lambda z . ( (z true) false) false)
+	     = lambda z . z
+	     = lambda z . true
+	     = true
 
-Question 4
-null = λ z . z true false false
-Null takes in a list, z , and checks to see if it's empty.
+    Question 5
+    null? = lambda p . p (lambda n a d . n)
+	      = lambda p . p (true)
+	      = lambda p . p true
 
-Question 5
+    Question 6
+    true = lambda a b . a
+	     = lambda a . a
+     	 = true
+
+    Question 7
+    false = lambda a b . b
+	      = lambda a . 0
+	      = false
+
+B:
+
+kar (kons e1 e2) ↝ e1
+(lambda p.p)(lambda n a d . a)(lambda a d z . z ( lambda a b . b)a d) e1 e2
+
+Beta Reduction 1:
+([p:=(lambda n a d . a)]p)
+(lambda n a d . a)
+
+Beta Reduction 2:
+(lambda a d z . z(lambda b.[a = a]b)d)e1 e2
+(lambda a d z . z (lambda b . b)d)e1 e2
+
+(lambda a d z . z ([b:=d]b))
+(lambda a d z . z d)
+
+BR1 + BR2:
+( ( lambda n a d . a) (lambda a d z . z d)) e1 e2
+Beta Reduction:
+( ( lambda a d . [n:= (lambda a d z . z d)]a)) e1 e2
+(lambda a d . a) e1 e2
+
+Beta Reduction:
+(lambda d . [a:=e1]a) e2
+(lambda d . e1) e2
+
+Beta Reduction:
+([d:= e2]e1)
+(e1)
+
+kdr (kons e1 e2) ↝ e2
+((lambda p . p)(lambda n a d . d))((lambda a d z . z(lambda a b . b)a d))e1 e2
+
+Kons Beta Reduction:
+(lambda a d z . z d)
+
+Kdr Beta Reduction:
+([p:= lambda n a d . d]p)
+(lambda n a d . d)
+
+Kdr + Kons:
+((lambda n a d . d)(lambda a d z . z d))e1 e2
+
+Beta Reduction:
+((lambda a d . [n:=(lambda a d z . z d )]d))e1 e2
+(lambda a d . d) e1 e2
+(lambda d . [a:= e1]d)e2
+(lambda d . d)e2
+(lambda[d:=e2]d)
+(e2)
 
 
+
+Part 2:
+
+(λ c . (λ a . (λ d . (λ h . (h (d (a (a (λ z y . y))) (d (a (a (λ f x . x))) (a (a (a (λ z x . x)))))) (h (a (a (λ z y . y))) (a (a (a (λ z x . x))))))) (λ n m . n (d m) (λ z y . y))) (λ n m . n a m)) (λ n z . c (n z) z)) (λ z g x . z (g x))
+
+Easier to read:
+
+	(λ c . 
+	(λ a . 
+	(λ d . 
+	(λ h . 
+	(h (d (a (a (λ z y . y))) 
+	(d (a (a (λ f x . x))) 
+	(a (a (a (λ z x . x)))))) 
+	(h (a (a (λ z y . y))) 
+	(a (a (a (λ z x . x))))))) 
+	(λ n m . n (d m) (λ z y . y))) 
+	(λ n m . n a m)) 
+	(λ n z . c (n z) z)) 
+	(λ z g x . z (g x))
+
+Solutions
+	(λ n m . n (d m) (λ z y . y)))  = (λ n. n (λ z y . y)) = (λ z y . y)
+	(λ n m . n a m)) = (λ n . n a) = a
+	(λ n z . c (n z) z))  = c
+	(λ z g x . z (g x)) = (λ z g. z)
+
+Using above reduces to
+	(λ c . 
+	(λ a . 
+	(λ d . 
+	(λ h . 
+	(h (d (a (a (λ z y . y))) 
+	(d (a (a (λ f x . x))) 
+	(a (a (a (λ z x . x)))))) 
+	(h (a (a (λ z y . y))) 
+	(a (a (a (λ z x . x))))))) 
+	(λ z y . y)) 
+	 a)
+	 c)
+	(λ z g. z)
+
+C is an unbound variable so it can be reduced to:
+	(λ a . 
+	(λ d . 
+	(λ h . 
+	(h (d (a (a (λ z y . y))) 
+	(d (a (a (λ f x . x))) 
+	(a (a (a (λ z x . x)))))) 
+	(h (a (a (λ z y . y))) 
+	(a (a (a (λ z x . x))))))) 
+	(λ z y . y)) 
+	 a)
+	(λ z g. z)
+
+
+Reduce d to (λ z y . y)
+	(λ h . 
+	(h (λ z y . y (a (a (λ z y . y))) 
+	(λ z y . y(a (a (λ f x . x))) 
+	(a (a (a (λ z x . x)))))) 
+	(h (a (a (λ z y . y))) 
+	(a (a (a (λ z x . x)))))))  
+	(λ z g. z)
+
+
+Alpha renaming 
+	(λ h . 
+	(h (λ z y . y (a (a (λ z y . y))) 
+	((λ z y . y (a (a (λ f x . x))) 
+	((λ z x . x))(a (a(λ f x . x)))) 
+	(a (a (a (λ z y . y))) 
+	(h (a (a (λ z x . x))))))
+	(a(a(a(λ zj. j)))))))
+	(λ kg.k)
+
+Beta Reduce h to λ k g.k
+	(λ k g.k (λ z y . y (a (a (λ z y . y))) 
+	((λ z y . y (a (a (λ f x . x))) 
+	(a (a (a (λ z y . y))) 
+	(λ kg.k (a (a (λ z x . x))))))
+	(a(a(a(λ zj. j)))))))
+
+Alpha Renaming
+	(λ k g.k (λ z y . y (a (a (λ z y . y))) 
+	((λ z y . y (a (a (λ f x . x))) 
+	(a (a (a (λ z y . y))) 
+	(λ z x . z(a(a(λzj.j)))))
+	(a(a(a(λ rs. s))))))))
+
+Beta Reducution
+	(λ g(λ z y . y (a (a (λ z y . y))) 
+	((λ z y . y (a (a (λ f x . x))) 
+	(a (a (a (λ z y . y))) 
+	(λ z x . z(a(a(λzj.j)))))
+	(a(a(a(λ rs. s))))))))
+
+Beta Reduce g to (λ z x . z(a(a(λzj.j)))(a(a(a(λ rs. s)))))
+	(λ z y . y (a (a (λ z y . y))) 
+	((λ z y . y (a (a (λ f x . x))) 
+	(a (a (a (λ z y . y)))))))
+
+Beta Reduction
+	(λ z y . y
+	((λ z y . y (a (a (λ f x . x))) 
+	(a (a (a (λ z y . y)))))))
+
+Beta Reduction
+	(λ z y . y (a (a (λ f x . x)))(a (a (a (λ z y . y)))))))
+
+Beta Reduction
+	(λ y . y(a (a (a (λ z y . y)))))
+
+Beta Reduction to Normal form
+	(a (a (a (λ z y . y))))
