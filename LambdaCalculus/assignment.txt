@@ -3,101 +3,67 @@ Seán Edward Comerford
 Lambda Calculus Assignment
 
 Part 1
-A:
-    Question 1
-    kons= lambda a d z . z false a d
-        = lambda a d . z (lambda x y . y) a d
 
-		/*Beta Reduction*/
-		(y) a d [x:=a]
-		(y) d [y:=d]
-		(d)
-		d
-
-		= lambda a d z . z d /*which is a pair*/
-
-    Question 2
-    kar = lambda p . p (lambda n a d . a)
-        = lambda p . p (true)
-        = lambda p . p true
-
-    Question 3
-    kdr = lambda p . p (lambda n a d . d)
-        = lambda p . p (false)
-        = lambda p . p false
-
-    Question 4
-    null = lambda z . z true false false
-	     = lambda z . ( (z true) false) false)
-	     = lambda z . z
-	     = lambda z . true
-	     = true
-
-    Question 5
-    null? = lambda p . p (lambda n a d . n)
-	      = lambda p . p (true)
-	      = lambda p . p true
-
-    Question 6
-    true = lambda a b . a
-	     = lambda a . a
-     	 = true
-
-    Question 7
-    false = lambda a b . b
-	      = lambda a . 0
-	      = false
-
-B:
+kons = λ a d z . z false a d
+kar = λ p . p (λ n a d . a)
+kdr = λ p . p (λ n a d . d)
+null = λ z . z true false false
+null? = λ p . p (λ n a d . n)
+true = λ a b . a
+false = λ a b . b
 
 kar (kons e1 e2) ↝ e1
-(lambda p.p)(lambda n a d . a)(lambda a d z . z ( lambda a b . b)a d) e1 e2
-
-Beta Reduction 1:
-([p:=(lambda n a d . a)]p)
-(lambda n a d . a)
-
-Beta Reduction 2:
-(lambda a d z . z(lambda b.[a = a]b)d)e1 e2
-(lambda a d z . z (lambda b . b)d)e1 e2
-
-(lambda a d z . z ([b:=d]b))
-(lambda a d z . z d)
-
-BR1 + BR2:
-( ( lambda n a d . a) (lambda a d z . z d)) e1 e2
-Beta Reduction:
-( ( lambda a d . [n:= (lambda a d z . z d)]a)) e1 e2
-(lambda a d . a) e1 e2
+Lets focus on the kons e1 e2 and then substitute that into kar
+kons = (lambda a d z . z false a d)
+(lambda a d z . z false a d) e1 e2
 
 Beta Reduction:
-(lambda d . [a:=e1]a) e2
-(lambda d . e1) e2
+(z false a d)[a:=e1]
+(z false e1 d)[d:=e2]
+(z false e1 e2)
+
+(lambda z . z false e1 e2)
+We can now use this with kar
+kar= (lambda p . p(lambda n a d . a))
+(lambda p . p(lambda n a d . a))(lambda z . z false e1 e2)
 
 Beta Reduction:
-([d:= e2]e1)
-(e1)
+(p(lambda n a d . a))[p:=(lambda z . z false e1 e2)]
+(lambda z . z false e1 e2)(lambda n a d . a)
+
+Beta Reduction:
+(z false e1 e2)[z:=(lambda n a d . a)]
+((lambda n a d . a) false e1 e2)
+
+/*(lambda n a d . a ) takes in three inputs, n a d and returns a */
+(lambda n a d . a)[n:=false, a:=e1, d:=e2]
+e1
 
 kdr (kons e1 e2) ↝ e2
-((lambda p . p)(lambda n a d . d))((lambda a d z . z(lambda a b . b)a d))e1 e2
-
-Kons Beta Reduction:
-(lambda a d z . z d)
-
-Kdr Beta Reduction:
-([p:= lambda n a d . d]p)
-(lambda n a d . d)
-
-Kdr + Kons:
-((lambda n a d . d)(lambda a d z . z d))e1 e2
+Lets focus on the kons e1 e2 and then substitute that into kar
+kons = (lambda a d z . z false a d)
+(lambda a d z . z false a d) e1 e2
 
 Beta Reduction:
-((lambda a d . [n:=(lambda a d z . z d )]d))e1 e2
-(lambda a d . d) e1 e2
-(lambda d . [a:= e1]d)e2
-(lambda d . d)e2
-(lambda[d:=e2]d)
-(e2)
+(z false a d)[a:=e1]
+(z false e1 d)[d:=e2]
+(z false e1 e2)
+
+(lambda z . z false e1 e2)
+We can now use this with kdr
+kdr=(lambda p . p (lambda n a d . d))
+
+(lambda p . p(lambda n a d . d))(lambda z . z false e1 e2)
+
+Beta Reduction:
+(p(lambda n a d . d))[p:=(lambda z . z false e1 e2)]
+((lambda z . z false e1 e2)(lambda n a d . d))
+
+Beta Reduction:
+(z false e1 e2)[z:(lambda n a d . d)]
+((lambda n a d . d) false e1 e2)
+[n:=false, a:=e1, d:=e2]
+e2
 
 null? (kons e1 e2) ↝  false
 Deal with (kons e1 e2 first)
