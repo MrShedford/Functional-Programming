@@ -4,13 +4,13 @@ Lambda Calculus Assignment
 
 Part 1
 
-kons = λ a d z . z false a d
-kar = λ p . p (λ n a d . a)
-kdr = λ p . p (λ n a d . d)
-null = λ z . z true false false
-null? = λ p . p (λ n a d . n)
-true = λ a b . a
-false = λ a b . b
+kons = lambda a d z . z false a d
+kar = lambda p . p (lambda n a d . a)
+kdr = lambda p . p (lambda n a d . d)
+null = lambda z . z true false false
+null? = lambda p . p (lambda n a d . n)
+true = lambda a b . a
+false = lambda a b . b
 
 kar (kons e1 e2) ↝ e1
 Lets focus on the kons e1 e2 and then substitute that into kar
@@ -116,113 +116,31 @@ Part 2:
 
 (lambda c . (lambda a . (lambda d . (lambda h . (h (d (a (a (lambda z y . y))) (d (a (a (lambda f x . x))) (a (a (a (lambda z x . x)))))) (h (a (a (lambda z y . y))) (a (a (a (lambda z x . x))))))) (lambda n m . n (d m) (lambda z y . y))) (lambda n m . n a m)) (lambda n z . c (n z) z)) (lambda z g x . z (g x))
 
-Easier to read:
+//using false = lambdaab.b , true = lambdaab.a renaming to prevent & removing arbitrary bracket
+(lambda c . (lambda a . (lambda d . lambda h . (h (d (a (a (false))) (d (a (a (false))) (a (a (a (false)))))) (h (a (a (false))) (a (a (a (false))))))) (true (d1 m1) (false))) (true a1 m)) (lambda n1 z1 . c1 (n1 z1) z1) (lambda z g1 x1 . z (g x))
 
-	(lambda c . 
-	(lambda a . 
-	(lambda d . 
-	(lambda h . 
-	(h (d (a (a (lambda z y . y))) 
-	(d (a (a (lambda f x . x))) 
-	(a (a (a (lambda z x . x)))))) 
-	(h (a (a (lambda z y . y))) 
-	(a (a (a (lambda z x . x))))))) 
-	(lambda n m . n (d m) (lambda z y . y))) 
-	(lambda n m . n a m)) 
-	(lambda n z . c (n z) z)) 
-	(lambda z g x . z (g x))
+//removing lambda c by substitution
+(lambda a . (lambda d . lambda h . (h (d (a (a (false))) (d (a (a (false))) (a (a (a (false)))))) (h (a (a (false))) (a (a (a (false))))))) (true (d1 m1) (false))) (true a1 m)(lambda z g1 x1 . z (g x))
 
-Solutions
-	(lambda n m . n (d m) (lambda z y . y)))  = (lambda n. n (lambda z y . y)) = (lambda z y . y)
-	(lambda n m . n a m)) = (lambda n . n a) = a
-	(lambda n z . c (n z) z))  = c
-	(lambda z g x . z (g x)) = (lambda z g. z)
+//removing lambda a by substitution
+(lambda d . lambda h . (h (d (true a1 m (true a1 m (false))) (d (true a1 m (true a1 m (false))) (true a1 m (true a1 m (true a1 m (false)))))) (h (true a1 m (true a1 m (false))) (true a1 m (true a1 m (true a1 m (false))))))) (true (d1 m1) (false))(lambda z g1 x1 . z (g x))
 
-Using above reduces to
-	(lambda c . 
-	(lambda a . 
-	(lambda d . 
-	(lambda h . 
-	(h (d (a (a (lambda z y . y))) 
-	(d (a (a (lambda f x . x))) 
-	(a (a (a (lambda z x . x)))))) 
-	(h (a (a (lambda z y . y))) 
-	(a (a (a (lambda z x . x))))))) 
-	(lambda z y . y)) 
-	 a)
-	 c)
-	(lambda z g. z)
+//removing lambda d by substitution
+(lambda h . (h (true (d1 m1) false (true a1 m (true a1 m (false))) (true (d1 m1) false (true a1 m (true a1 m (false))) (true a1 m (true a1 m (true a1 m (false)))))) (h (true a1 m (true a1 m (false))) (true a1 m (true a1 m (true a1 m (false))))))) (lambda z g1 x1 . z (g x))
 
-C is an unbound variable so it can be reduced to:
-	(lambda a . 
-	(lambda d . 
-	(lambda h . 
-	(h (d (a (a (lambda z y . y))) 
-	(d (a (a (lambda f x . x))) 
-	(a (a (a (lambda z x . x)))))) 
-	(h (a (a (lambda z y . y))) 
-	(a (a (a (lambda z x . x))))))) 
-	(lambda z y . y)) 
-	 a)
-	(lambda z g. z)
+//removing lambda h by substitution
+(lambda z g1 x1 . z )(g x) (true (d1 m1) false (true a1 m (true a1 m false)) (true (d1 m1) false (true a1 m (true a1 m false)) (true a1 m (true a1 m (true a1 m false))))) ((lambda z g1 x1 . z )(g x) (true a1 m (true a1 m false)) (true a1 m (true a1 m (true a1 m false)))) 
 
+//rewriting:
+(lambdaz.lambdag1.lambdax1.z)(g x) (true (d1 m1) false (true a1 m (true a1 m false)) (true (d1 m1) false (true a1 m (true a1 m false)) (true a1 m (true a1 m (true a1 m false))))) ((lambdaz.lambdag1.lambdax1.z)(g x) (true a1 m (true a1 m false)) (true a1 m (true a1 m (true a1 m false)))) 
 
-Reduce d to (lambda z y . y)
-	(lambda h . 
-	(h (lambda z y . y (a (a (lambda z y . y))) 
-	(lambda z y . y(a (a (lambda f x . x))) 
-	(a (a (a (lambda z x . x)))))) 
-	(h (a (a (lambda z y . y))) 
-	(a (a (a (lambda z x . x)))))))  
-	(lambda z g. z)
+//removing lambdaz in two occurances by substitution
+(lambdag1.lambdax1.g x)(true (d1 m1) false (true a1 m (true a1 m false)) (true (d1 m1) false (true a1 m (true a1 m false)) (true a1 m (true a1 m (true a1 m false))))) ((lambdag1.lambdax1.g x) (true a1 m (true a1 m false)) (true a1 m (true a1 m (true a1 m false)))) 
 
+//removing lambdag1 in two occurances by substitution
+(lambdax1.g x) ((lambdax1.g x) (true a1 m (true a1 m (true a1 m false)))) 
 
-Alpha renaming 
-	(lambda h . 
-	(h (lambda z y . y (a (a (lambda z y . y))) 
-	((lambda z y . y (a (a (lambda f x . x))) 
-	((lambda z x . x))(a (a(lambda f x . x)))) 
-	(a (a (a (lambda z y . y))) 
-	(h (a (a (lambda z x . x))))))
-	(a(a(a(lambda zj. j)))))))
-	(lambda kg.k)
+//removing lambdax1 by substitution 
+(g x) 
 
-Beta Reduce h to lambda k g.k
-	(lambda k g.k (lambda z y . y (a (a (lambda z y . y))) 
-	((lambda z y . y (a (a (lambda f x . x))) 
-	(a (a (a (lambda z y . y))) 
-	(lambda kg.k (a (a (lambda z x . x))))))
-	(a(a(a(lambda zj. j)))))))
-
-Alpha Renaming
-	(lambda k g.k (lambda z y . y (a (a (lambda z y . y))) 
-	((lambda z y . y (a (a (lambda f x . x))) 
-	(a (a (a (lambda z y . y))) 
-	(lambda z x . z(a(a(lambdazj.j)))))
-	(a(a(a(lambda rs. s))))))))
-
-Beta Reducution
-	(lambda g(lambda z y . y (a (a (lambda z y . y))) 
-	((lambda z y . y (a (a (lambda f x . x))) 
-	(a (a (a (lambda z y . y))) 
-	(lambda z x . z(a(a(lambdazj.j)))))
-	(a(a(a(lambda rs. s))))))))
-
-Beta Reduce g to (lambda z x . z(a(a(lambdazj.j)))(a(a(a(lambda rs. s)))))
-	(lambda z y . y (a (a (lambda z y . y))) 
-	((lambda z y . y (a (a (lambda f x . x))) 
-	(a (a (a (lambda z y . y)))))))
-
-Beta Reduction
-	(lambda z y . y
-	((lambda z y . y (a (a (lambda f x . x))) 
-	(a (a (a (lambda z y . y)))))))
-
-Beta Reduction
-	(lambda z y . y (a (a (lambda f x . x)))(a (a (a (lambda z y . y)))))))
-
-Beta Reduction
-	(lambda y . y(a (a (a (lambda z y . y)))))
-
-Beta Reduction to Normal form
-	(a (a (a (lambda z y . y))))
+Normal Form = g x
