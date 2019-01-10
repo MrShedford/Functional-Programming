@@ -1,5 +1,4 @@
 /* Exercise 1 */
-
 xCount([H1 | T], C) :- =(H1, x), !, NewC is C + 1, xCount(T, NewC); xCount(T, C).
 xCount([], A) :- A is 1.
 
