@@ -9,7 +9,6 @@ mapSkip fn x
 --2018 Jan
 tear :: (a -> Bool) -> [a] -> [[a]]
 tear p x = (filter p x):(filter (not.p) x):[]
-
 --2017 Aug
 foo :: [Int] -> [Int] -> [Int]
 foo (x) (y) = f 1 x y
